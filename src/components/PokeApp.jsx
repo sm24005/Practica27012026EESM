@@ -1,19 +1,21 @@
-  import { useState } from 'react';
-
+import { useState } from 'react';
+import axios from 'axios';
 function PokeApp() {
   const [busqueda, setBusqueda] = useState('');
   const [pokemon, setPokemon] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [error, setError] = useState(false);
 
+
   // Función para buscar el Pokémon
   const buscarPokemon = async (e) => {
     e.preventDefault();
     setError(false);
     try {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${busqueda.toLowerCase()}`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
+      const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${busqueda.toLowerCase()}`);
+      if (!res.status==200) throw new Error();
+      const data = await res.data;
+      console.log(res);
       setPokemon(data);
     } catch (err) {
       setError(true);
@@ -21,14 +23,15 @@ function PokeApp() {
     }
   };
 
+
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
       <h2>Buscador de Pokémon</h2>
-      
+     
       {/* Formulario de búsqueda */}
       <form onSubmit={buscarPokemon} style={{ marginBottom: '20px' }}>
-        <input 
-          type="text" 
+        <input
+          type="text"
           placeholder="Ej: charizard o 6"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
@@ -39,7 +42,9 @@ function PokeApp() {
         </button>
       </form>
 
+
       {error && <p style={{ color: 'red' }}>Pokémon no encontrado...</p>}
+
 
       {/* Tabla de Resultados */}
       {pokemon && (
@@ -69,20 +74,21 @@ function PokeApp() {
         </table>
       )}
 
+
       {/* --- MODAL --- */}
       {modalAbierto && pokemon && (
         <div style={estilosModal.overlay}>
           <div style={estilosModal.contenido}>
             <button onClick={() => setModalAbierto(false)} style={estilosModal.botonCerrar}>X</button>
-            
+           
             <h3>Información Detallada</h3>
-            <img 
-              src={pokemon.sprites.other['official-artwork'].front_default} 
-              alt={pokemon.name} 
+            <img
+              src={pokemon.sprites.other['official-artwork'].front_default}
+              alt={pokemon.name}
               style={{ width: '150px' }}
             />
             <h2>{pokemon.name.toUpperCase()}</h2>
-            
+           
             <div style={{ textAlign: 'left' }}>
               <p><strong>Altura:</strong> {pokemon.height / 10} m</p>
               <p><strong>Peso:</strong> {pokemon.weight / 10} kg</p>
@@ -101,6 +107,7 @@ function PokeApp() {
   );
 }
 
+
 // Estilos básicos para el Modal (puedes mover esto a un CSS)
 const estilosModal = {
   overlay: {
@@ -115,5 +122,6 @@ const estilosModal = {
     position: 'absolute', top: '10px', right: '10px', border: 'none', background: 'none', fontSize: '20px', cursor: 'pointer'
   }
 };
+
 
 export default PokeApp;
