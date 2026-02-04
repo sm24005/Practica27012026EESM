@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import pokeAPI from '../pokeAPI';
 function PokemonCard() {
   const [pokemon, setPokemon] = useState(null);
 
 
   useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon/meowth')
+     console.log(pokeAPI);
+    pokeAPI.get('/pokemon/psyduck')
       .then((response) => {
         setPokemon(response.data);
+        console.log(response);
       }).catch((error) => {
         console.error('Error fetching the Pokémon data:', error);
       });

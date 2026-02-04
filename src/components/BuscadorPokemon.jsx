@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../pokeAPI';
 function BuscadorPokemon() {
   const [listaPokemon, setListaPokemon] = useState([]); // Para el combo
   const [pokemonSeleccionado, setPokemonSeleccionado] = useState(''); // Nombre elegido
@@ -9,7 +9,8 @@ function BuscadorPokemon() {
 
   // 1. Cargar la lista inicial para el combo (limitamos a 151 para el ejemplo)
   useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon?limit=151')    
+    console.log(axios);
+    axios.get('/pokemon?limit=151')    
       .then(response => setListaPokemon(response.data.results));
   }, []);
 
@@ -18,7 +19,7 @@ function BuscadorPokemon() {
   useEffect(() => {
     if (pokemonSeleccionado) {
       setCargando(true);
-      axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonSeleccionado}`)      
+      axios.get(`/pokemon/${pokemonSeleccionado}`)      
         .then(response => {
           setDatosPokemon(response.data);
           setCargando(false);

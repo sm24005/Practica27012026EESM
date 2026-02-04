@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from '../pokeAPI';
 function PokeApp() {
   const [busqueda, setBusqueda] = useState('');
   const [pokemon, setPokemon] = useState(null);
@@ -12,7 +12,7 @@ function PokeApp() {
     e.preventDefault();
     setError(false);
     try {
-      const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${busqueda.toLowerCase()}`);
+      const res = await axios.get(`/pokemon/${busqueda.toLowerCase()}`);
       if (!res.status==200) throw new Error();
       const data = await res.data;
       console.log(res);
